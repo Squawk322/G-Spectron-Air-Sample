@@ -87,7 +87,8 @@ def peak_search(counts, fwhmc, signif, encal, channels=4096, \
             is_sum += (i+1)*j
             s_sum += j
             if 400<i+1<900:
-                print(i+1)
+                # print(i+1)
+                pass
             if pend*pend_ant <= 0:
                 ubic = np.array([[i-1, v_a]])  #posicion del Canal, Signif
                 if (i-iant) > 3:
@@ -104,7 +105,8 @@ def peak_search(counts, fwhmc, signif, encal, channels=4096, \
             if k == 1:
                 pk_center = is_sum/s_sum
                 if 600<pk_center<900:
-                    print(pk_center)
+                    # print(pk_center)
+                    pass
                 pk_signif = -dob[0][1]
                 if pk_signif >= signif and ch_ini <= pk_center <= ch_end:
                     peak = [[
@@ -132,7 +134,8 @@ def peak_search(counts, fwhmc, signif, encal, channels=4096, \
                     pk_center = is_sum/s_sum
                     # TODO! : AQUI
                     if 600<pk_center<900:
-                        print(pk_center)
+                        # print(pk_center)
+                        pass
                     pk_signif = -dob[2*l][1]
                     if pk_signif >= signif and ch_ini <= pk_center <= ch_end:
                         peak = [[
