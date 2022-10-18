@@ -1,0 +1,12 @@
+efficiency:
+    values:
+        [[511, 1.81E-4],
+         [661, 2E-5]]
+    curve:
+        active: False
+        values:
+            C1: 0
+            C2: 0
+            C3: 0
+            C4: 0
+

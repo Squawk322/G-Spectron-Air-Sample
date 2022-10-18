@@ -73,6 +73,7 @@
      <string>Análisis</string>
     </property>
     <addaction name="menu_pks"/>
+    <addaction name="menu_cua_air"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuCal"/>
@@ -128,6 +129,11 @@
   <action name="menu_pks">
    <property name="text">
     <string>Búsqueda de Fotopicos...</string>
+   </property>
+  </action>
+  <action name="menu_cua_air">
+   <property name="text">
+    <string>Cuantificación de Fotopicos (Aire)</string>
    </property>
   </action>
  </widget>

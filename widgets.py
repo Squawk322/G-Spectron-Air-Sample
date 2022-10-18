@@ -63,8 +63,8 @@ class MyTabWidget(QtGui.QWidget):
         self.zoom = pg.PlotWidget()
         self.vscroll = QtGui.QScrollBar()
         self.deriv = Der_Graph()
-        self.reporbar = QtGui.QLabel('<b>Resultados</b>')
-        self.reportab = TableWidget()
+        # self.reporbar = QtGui.QLabel('<b>Resultados</b>')
+        # self.reportab = TableWidget()
         self.file = []
         self.plot_data = None
         self.zoom_data = None
@@ -563,11 +563,11 @@ class TableWidget(pg.TableWidget):
                     int(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
                 )
         self.resizeRowsToContents()
-        self.setStyleSheet(
-            "QHeaderView::section { background-color:cyan; color:black;}\
-            QTableCornerButton::section {  background-color:cyan; color:black;\
-                                         border: 1px outset gray;}"
-        )
+        # self.setStyleSheet(
+        #     "QHeaderView::section { background-color:cyan; color:black;}\
+        #     QTableCornerButton::section {  background-color:cyan; color:black;\
+        #                                  border: 1px outset gray;}"
+        # )
         # self.setStyleSheet(
         #     "QTableCornerButton::section {  background-color:cyan; color:black}"
         # )

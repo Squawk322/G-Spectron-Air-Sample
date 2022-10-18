@@ -16,8 +16,9 @@ import numpy as np
 import pyqtgraph as pg
 from readfile import read_cnf_file
 from dialogs import Pk_Search
+from cuantifwiz import  Cuantif_Wizard
 from widgets import AniLabel, MyTabWidget
-from pyqtgraph.Qt import QtCore, QtGui, uic
+from pyqtgraph.Qt import QtCore, QtGui, QtWidgets, uic
 
 #%%
 # mod_path, _ = os.path.split(os.path.abspath(__file__))
@@ -29,10 +30,11 @@ ui_main, ui_main_parent = uic.loadUiType("appearance/air_main.ui")
 
 class Air_MainWindow(ui_main_parent, ui_main):
     '''Ventana Principl del programa Air Sample'''
-    def __init__(self, config):
-        QtGui.QMainWindow.__init__(self)
+    def __init__(self, config, dark_v):
+        QtWidgets.QMainWindow.__init__(self)
         ui_main.__init__(self)
         self.setupUi(self)
+        self.dark_v = dark_v
         pg.setConfigOptions(antialias=True)
         exit_act = QtGui.QAction(QtGui.QIcon(
             'icons/exit3.png'),
@@ -70,6 +72,7 @@ class Air_MainWindow(ui_main_parent, ui_main):
         self.action_log.triggered.connect(self.log_trigg)
         self.tab_wid.currentChanged.connect(self.tab_change)
         self.menu_pks.triggered.connect(self.peak_search)
+        self.menu_cua_air.triggered.connect(self.cuantif_air)
         
         # self.tab_change()
 
@@ -172,8 +175,27 @@ class Air_MainWindow(ui_main_parent, ui_main):
         #         x.setEnabled(True)
 
     @QtCore.pyqtSlot()
+    def cuantif_air(self):
+        '''Metodo que inicia la ventana externa para ejecutar la rutina de 
+        cuantificación de picos'''
+        ind = self.tab_wid.currentIndex()
+        if self.tab_wid.isTabEnabled(ind):
+            cuant_wiz = Cuantif_Wizard(
+                self,
+                self.tabs[ind].data,
+                None, 
+                None,
+                "config/nuclides.yml",
+                'cals/airdefault.yml',
+                self.dark_v,
+                sp_name=self.tabs[ind].file[1]
+            )
+            cuant_wiz.exec_() 
+        
+    @QtCore.pyqtSlot()
     def peak_search(self):
-        '''Metodo que inicia la ventana externa para ejecutar la rutina de busqueda de picos'''
+        '''Metodo que inicia la ventana externa para ejecutar la rutina de 
+        busqueda de picos'''
         ind = self.tab_wid.currentIndex()
         if self.tab_wid.isTabEnabled(ind):
             diag_psearch = Pk_Search(self, self.tabs[ind].data)
@@ -248,8 +270,8 @@ if __name__ == "__main__":
     dark_theme = True
     import yaml
     config = yaml.safe_load(open("config/config.yml"))
-    app = QtGui.QApplication(sys.argv)
-    window = Air_MainWindow(config)
+    app = QtWidgets.QApplication(sys.argv)
+    window = Air_MainWindow(config, dark_theme)
     if dark_theme:
         app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     else:
