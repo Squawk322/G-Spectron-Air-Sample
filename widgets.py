@@ -13,7 +13,7 @@ import pyqtgraph as pg
 import pyqtgraph.parametertree.parameterTypes as pTypes
 
 from pandas import to_datetime
-from pyqtgraph.Qt import QtCore, QtGui, uic
+from pyqtgraph.Qt import QtCore, QtGui, uic, QtWidgets
 from pyqtgraph.dockarea import Dock, DockArea
 from pyqtgraph.parametertree import ParameterTree
 from readfile import Spec
@@ -34,22 +34,22 @@ class DockArea2(DockArea):
 
 # %%
 
-class MyTabWidget(QtGui.QWidget):
+class MyTabWidget(QtWidgets.QWidget):
     def __init__(self):
-        QtGui.QWidget.__init__(self)
-        self.central_lay = QtGui.QVBoxLayout(self)
+        QtWidgets.QWidget.__init__(self)
+        self.central_lay = QtWidgets.QVBoxLayout(self)
 
         # Partes de la Widget
-        bar_wid = QtGui.QWidget()
+        bar_wid = QtWidgets.QWidget()
         bar_wid.setStyleSheet('background-color: black')
         bar_wid.setFixedHeight(25)
         self.area = DockArea2()
 
         # Partes y armado de la barra
         texts = ['Canal :', '', 'Energía : ', '', 'Cuentas :', '']
-        bar_lay = QtGui.QHBoxLayout(bar_wid)
+        bar_lay = QtWidgets.QHBoxLayout(bar_wid)
         bar_lay.setContentsMargins(10, 0, 10, 0)
-        self.bar = [QtGui.QLabel(f'{texts[i]}') for i in range(6)]
+        self.bar = [QtWidgets.QLabel(f'{texts[i]}') for i in range(6)]
         for i in range(6):
             bar_lay.addWidget(self.bar[i])
 
@@ -61,9 +61,9 @@ class MyTabWidget(QtGui.QWidget):
         self.dockrep = Dock("Area de Reportes", size=(500, 300), hideTitle=True)
         self.graf = pg.PlotWidget()
         self.zoom = pg.PlotWidget()
-        self.vscroll = QtGui.QScrollBar()
+        self.vscroll = QtWidgets.QScrollBar()
         self.deriv = Der_Graph()
-        # self.reporbar = QtGui.QLabel('<b>Resultados</b>')
+        # self.reporbar = QtWidgets.QLabel('<b>Resultados</b>')
         # self.reportab = TableWidget()
         self.file = []
         self.plot_data = None
@@ -78,7 +78,7 @@ class MyTabWidget(QtGui.QWidget):
         self.info = ParameterTree()
         self.infotree = InfoPar(name='par'+str(i))
         self.reportab = TableWidget()
-        self.reporbar = QtGui.QLabel('<b>Resultados</b>')
+        self.reporbar = QtWidgets.QLabel('<b>Resultados</b>')
 
         # Armado de la Widget
         self.central_lay.addWidget(bar_wid)
@@ -573,14 +573,14 @@ class TableWidget(pg.TableWidget):
         # )
 
 # %% Label con animación de movimiento
-class AniLabel(QtGui.QLabel):
+class AniLabel(QtWidgets.QLabel):
 
     x = 0
     paused = False
     document = None
 
     def __init__(self, speed=50, width=450):
-        QtGui.QLabel.__init__(self)
+        QtWidgets.QLabel.__init__(self)
         self.fm = QtGui.QFontMetrics(self.font())
         self.setFixedSize(width, 25)
         self.speed = speed
@@ -633,7 +633,7 @@ class AniLabel(QtGui.QLabel):
 if __name__ == "__main__":
     import sys
     print('Hola QT')
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = MyTabWidget()
     window.show()
     sys.exit(app.exec_())

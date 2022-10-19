@@ -12,12 +12,12 @@ import sys
 import yaml
 import qdarkstyle
 import air_main as ar
-from pyqtgraph.Qt import QtGui
+from pyqtgraph.Qt import QtGui, QtWidgets
 
 if __name__ == "__main__":
     print('Hola QT')
     config = yaml.safe_load(open("config/config.yml"))
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = ar.Air_MainWindow(config)
     dark_theme = False
     # app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
