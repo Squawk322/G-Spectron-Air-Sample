@@ -67,7 +67,7 @@ class Cuantif_Wizard(QtWidgets.QWizard):
         # 0:Watermark(left) 1:Logo(Header) 2:Banner(Fondo Header) 3:OnlyMac
         # self.setPixmap(
         #     QtWidgets.QWizard.BannerPixmap, # 2
-        #     QtGui.QPixmap("icons/banner.png")
+        #     QtWidgets.QPixmap("icons/banner.png")
         # )
         # self.setPixmap(
         #     QtWidgets.QWizard.WatermarkPixmap, # 0

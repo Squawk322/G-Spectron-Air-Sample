@@ -54,7 +54,7 @@ class Air_MainWindow(ui_main_parent, ui_main):
         self.status_label = AniLabel(50,400)
         # self.status_label.setText(' ')
         self.status_bar.addPermanentWidget(self.status_label)
-        a = QtGui.QLabel('')
+        a = QtWidgets.QLabel('')
         self.status_bar.addPermanentWidget(a)
         # Número de pestañas máximas
         self.n_files = config['file_number']
@@ -94,7 +94,7 @@ class Air_MainWindow(ui_main_parent, ui_main):
     def cnf_browser(self):
         '''Abre la ventana de apertura de archivo con extencion *.CNF, lee el 
         archivo, almacena la informacion y'''
-        file_name = QtGui.QFileDialog.getOpenFileName(
+        file_name = QtWidgets.QFileDialog.getOpenFileName(
             self, 'Abrir Archivo', self.browse_path,
             'CNF File (*.CNF *.cnf )'
         )
@@ -103,7 +103,7 @@ class Air_MainWindow(ui_main_parent, ui_main):
             try:
                 sp_obj = read_cnf_file(file_name[0])
             except:
-                QtGui.QMessageBox.critical(
+                QtWidgets.QMessageBox.critical(
                     self, 'Error al leer archivo...',
                     'El archivo especificado no existe o posee un formato '
                     'incompatible'
@@ -113,13 +113,13 @@ class Air_MainWindow(ui_main_parent, ui_main):
                 if self.n_tabs < self.n_files:
                     tab_i = self.add_tab(sp_obj, file_name)
                 else:
-                    ok_act = QtGui.QMessageBox.question(
+                    ok_act = QtWidgets.QMessageBox.question(
                         self, 'Slots ocupados...',
                         'Máxima cantidad de archivos abiertos '
                         'permitido,\n¿Desea reemplazar algún slot?'
                     )
-                    if ok_act == QtGui.QMessageBox.Yes:
-                        tabfull, ok_act = QtGui.QInputDialog.getInt(
+                    if ok_act == QtWidgets.QMessageBox.Yes:
+                        tabfull, ok_act = QtWidgets.QInputDialog.getInt(
                             self, 'Reemplazar slot',
                             'Ingrese el número del slot a reemplazar: '
                             f'(1 - {self.n_files})',
