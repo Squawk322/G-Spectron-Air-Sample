@@ -45,6 +45,7 @@ def legen_r_w(n):
         P = np.polyint(p)
         weight[i] = np.polyval(P, 1)-np.polyval(P, -1)
     return root, weight
+
 def integrate(func, coefficients, ch_ini, ch_fin, peak_center = 0, n = 16):
     '''integrate(func, coefficients, peak_center, ch_ini, ch_fin, n=16)
     \nParámetros:
@@ -69,6 +70,7 @@ def integrate(func, coefficients, ch_ini, ch_fin, peak_center = 0, n = 16):
     y = func(coefficients, x, peak_center)
     inte = np.sum(w*y)*(ch_fin-ch_ini)/2
     return inte
+
 def single_fun(COEF, CH, CENTROID):
     """
     COEF es un vector que contiene los valores de las constantes a ajustar.
@@ -86,6 +88,7 @@ def single_fun(COEF, CH, CENTROID):
             *np.exp(COEF[2]*(2*CH-2*CENTROID+COEF[2])/(2*COEF[1]**2))\
                 *np.heaviside(CENTROID-COEF[2]-CH, 0.5)
     return curv
+
 def single_fun_res(COEF, CH, COUNTS, PCENT, BG, WBG):
     # curv = COEF[0]*np.exp(-((CH-PCENT)**2)/(2*COEF[1]**2))\
     #     *np.heaviside(CH-PCENT+COEF[2], 1) +COEF[0]\
@@ -93,6 +96,7 @@ def single_fun_res(COEF, CH, COUNTS, PCENT, BG, WBG):
     #             *np.heaviside(PCENT-COEF[2]-CH, 0) + BG
     curv_s = BG+single_fun(COEF, CH, PCENT)
     return (COUNTS-curv_s)**2/WBG
+
 def multiplet_fun(COEF, CH, dummy = None):
     """
     COEF es un vector que contiene los valores de las constantes a ajustar.
@@ -228,6 +232,7 @@ def peak_analysis_ind(SPEC, FWHMC, BGSTEP=True, lims=None):
     n_peak = 1
     lim_it = 0
     lim_it_multi = 0
+    zerovalue = 1
     for i in range(NPEAKS-1):
         fw = FWHMC[int(round(PCHANN[i]))-1]
         signi = PSIGNIF[i]
@@ -286,6 +291,9 @@ def peak_analysis_ind(SPEC, FWHMC, BGSTEP=True, lims=None):
                                   +b2*(CHROI[j]-CHROI[fond])**2)/(fond*(lroi-2*fond+1)**2)
                 WBGS[j] = ROI[j]+(b1*(np.sum(ROI)-PSUM)**2+b2*np.sum(ROI)**2  \
                                   +(b2-b1)**2*PSUM*fond)/(fond*np.sum(ROI)**2)
+            elems = [BGL, WBGL, BGS, WBGS]
+            for ik in elems:
+                ik[ik == 0] = zerovalue 
             if BGSTEP:
                 BG = BGS
                 WBG = WBGS
@@ -377,6 +385,9 @@ def peak_analysis_ind(SPEC, FWHMC, BGSTEP=True, lims=None):
                                       +b2*(CHROI[j]-CHROI[fond])**2)/(fond*(lroi-2*fond+1)**2)
                     WBGS[j] = ROI[j]+(b1*(np.sum(ROI)-PSUM)**2+b2*np.sum(ROI)**2  \
                                       +(b2-b1)**2*PSUM*fond)/(fond*np.sum(ROI)**2)
+                elems = [BGL, WBGL, BGS, WBGS]
+                for ik in elems:
+                    ik[ik == 0] = zerovalue
                 if BGSTEP:
                     BG = BGS
                     WBG = WBGS
@@ -417,7 +428,7 @@ def peak_analysis_ind(SPEC, FWHMC, BGSTEP=True, lims=None):
     if PLOT:
         plt.scatter(chann, SPEC.counts, marker='.', c='y',linewidth = 0.5)    
         plt.plot(chann, Bkg_Tot, 'c' , linewidth=0.5)
-        Peaks_Indiv = np.array(Peaks_Indiv)
+        Peaks_Indiv = np.array(Peaks_Indiv, dtype=np.ndarray)
         for i,j in Peaks_Indiv:
             plt.plot(i, j, 'r')
         Peaks_Multi = np.array(Peaks_Multi)
@@ -444,6 +455,7 @@ def peak_analysis(SPEC, FWHMC, BGSTEP=True, PLOT=False):
     Peaks_Multi = []
     Peak_Fit_Data = []
     n_peak = 1
+    zerovalue = 1
     for i in range(NPEAKS-1):
         fw = FWHMC[int(round(PCHANN[i]))-1]
         signi = PSIGNIF[i]
@@ -499,12 +511,16 @@ def peak_analysis(SPEC, FWHMC, BGSTEP=True, PLOT=False):
                                   +b2*(CHROI[j]-CHROI[fond])**2)/(fond*(lroi-2*fond+1)**2)
                 WBGS[j] = ROI[j]+(b1*(np.sum(ROI)-PSUM)**2+b2*np.sum(ROI)**2  \
                                   +(b2-b1)**2*PSUM*fond)/(fond*np.sum(ROI)**2)
+            elems = [BGL, WBGL, BGS, WBGS]
+            for ik in elems:
+                ik[ik == 0] = zerovalue  
             if BGSTEP:
                 BG = BGS
                 WBG = WBGS
             else:
                 BG = BGL
-                WBG = BGL
+                WBG = BGL 
+                # TODO! : no será WBG = WBGL?????
             COEF[0] = SPEC.counts[int(round(PCENT))-1]-BG[np.where(CHROI == round(PCENT))[0][0]]
             COEF[1] = FWHMC[int(round(PCENT))-1]/np.sqrt(8*np.log(2))
             COEF[2] = 0.5*FWHMC[int(round(PCENT))-1]
@@ -579,6 +595,9 @@ def peak_analysis(SPEC, FWHMC, BGSTEP=True, PLOT=False):
                                       +b2*(CHROI[j]-CHROI[fond])**2)/(fond*(lroi-2*fond+1)**2)
                     WBGS[j] = ROI[j]+(b1*(np.sum(ROI)-PSUM)**2+b2*np.sum(ROI)**2  \
                                       +(b2-b1)**2*PSUM*fond)/(fond*np.sum(ROI)**2)
+                elems = [BGL, WBGL, BGS, WBGS]
+                for ik in elems:
+                    ik[ik == 0] = zerovalue 
                 if BGSTEP:
                     BG = BGS
                     WBG = WBGS
@@ -619,7 +638,7 @@ def peak_analysis(SPEC, FWHMC, BGSTEP=True, PLOT=False):
     if PLOT:
         plt.scatter(chann, SPEC.counts, marker='.', c='y',linewidth = 0.5)    
         plt.plot(chann, Bkg_Tot, 'c' , linewidth=0.5)
-        Peaks_Indiv = np.array(Peaks_Indiv)
+        Peaks_Indiv = np.array(Peaks_Indiv, dtype=np.ndarray)
         for i,j in Peaks_Indiv:
             plt.plot(i, j, 'r')
         Peaks_Multi = np.array(Peaks_Multi)
@@ -648,7 +667,7 @@ if __name__ == "__main__":
     ahue = limits_calc(c, fwhmc)
     print('space')
     c.peak_dat, c.bkg = peak_analysis(c, fwhmc, PLOT=True)
-    print('space')
-    c.peak_dat, c.bkg = peak_analysis_ind(c, fwhmc, lims=ahue)
+    # print('space')
+    # c.peak_dat, c.bkg = peak_analysis_ind(c, fwhmc, lims=ahue)
     # c.peak_dat, c.bkg = peak_analysis_ind(c, fwhmc)
     
