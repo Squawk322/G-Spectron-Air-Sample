@@ -1,5 +1,6 @@
 file_number: 5
 nuclide_file : config/nuclides.yml
+dataFolder : files
 color : blue
 brand : ford
 city: new york

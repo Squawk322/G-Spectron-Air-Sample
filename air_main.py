@@ -59,6 +59,13 @@ class Air_MainWindow(ui_main_parent, ui_main):
         # Número de pestañas máximas
         self.n_files = config['file_number']
         self.nuclide_file = config['nuclide_file']
+        bp = config['dataFolder']
+        if os.path.isabs(bp):
+            self.browse_path = bp
+        else:
+            self.browse_path = os.path.join(os.getcwd(), bp)
+            
+        print(self.browse_path)
         self.n_tabs = 0
         self.tabs = []
         self.banners = []
@@ -88,7 +95,7 @@ class Air_MainWindow(ui_main_parent, ui_main):
         '''Abre la ventana de apertura de archivo con extencion *.CNF, lee el 
         archivo, almacena la informacion y'''
         file_name = QtGui.QFileDialog.getOpenFileName(
-            self, 'Abrir Archivo', 'files/',
+            self, 'Abrir Archivo', self.browse_path,
             'CNF File (*.CNF *.cnf )'
         )
         sp_obj = 0
@@ -185,7 +192,7 @@ class Air_MainWindow(ui_main_parent, ui_main):
                 self.tabs[ind].data,
                 None, 
                 None,
-                "config/nuclides.yml",
+                self.nuclide_file,
                 'cals/airdefault.yml',
                 self.dark_v,
                 sp_name=self.tabs[ind].file[1]

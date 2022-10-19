@@ -606,9 +606,10 @@ class Manual_Page(QtWidgets.QWizardPage):
         self.plot_data.setLogMode(False, True)
         x_0 = (3 * self.limits[0][0] - self.limits[0][1]) / 2
         x_1 = (3 * self.limits[0][1] - self.limits[0][0]) / 2
-        y_1 = (np.ceil(np.log10(self.sp_obj.counts[pos])))-0.8
+        # y_1 = (np.ceil(np.log10(self.sp_obj.counts[pos])))-0.8
+        y_1 = np.log10(self.sp_obj.counts[pos]) * 1.05
         t = self.sp_obj.counts[int(x_1)]
-        if t>0:
+        if t>5:
             y_0 = (np.log10(t))-0.1
         else:
             y_0 = -0.1
@@ -1179,9 +1180,10 @@ class Auto_Page(QtWidgets.QWizardPage):
         pos = round(pk.cen_ch)
         x_0 = (3 * xmin - xmax) / 2
         x_1 = (3 * xmax - xmin) / 2
-        y_1 = (np.ceil(np.log10(self.sp_obj.counts[pos])))-0.8
+        # y_1 = (np.ceil(np.log10(self.sp_obj.counts[pos])))-0.8
+        y_1 = np.log10(self.sp_obj.counts[pos]) * 1.05
         t = self.sp_obj.counts[int(x_1)]
-        if t>0:
+        if t>5:
             y_0 = (np.log10(t))-0.1
         else:
             y_0 = -0.1
